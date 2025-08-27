@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Estudante - ClassDocs</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Chat do Estudante</h1>
+            <nav>
+                <a href="/" class="btn btn-secondary">Início</a>
+                <a href="/teacher" class="btn btn-secondary">Área do Professor</a>
+            </nav>
+        </header>
+
+        <main class="chat-main">
+            <div class="chat-container">
+                <div id="chatMessages" class="chat-messages">
+                    <div class="system-message">
+                        <p>👋 Olá! Sou seu assistente de ensino do ClassDocs.</p>
+                        <p>Faça perguntas sobre o conteúdo da aula e eu te ajudarei a aprender!</p>
+                        <p class="connection-status" id="connectionStatus">Conectando...</p>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <input type="text" 
+                               id="messageInput" 
+                               placeholder="Faça uma pergunta sobre o conteúdo da aula..." 
+                               disabled>
+                        <button id="sendButton" class="btn btn-primary" disabled>
+                            <svg class="send-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        class ChatApp {
+            constructor() {
+                this.ws = null;
+                this.messageInput = document.getElementById('messageInput');
+                this.sendButton = document.getElementById('sendButton');
+                this.chatMessages = document.getElementById('chatMessages');
+                this.connectionStatus = document.getElementById('connectionStatus');
+                
+                this.init();
+            }
+
+            init() {
+                this.connect();
+                this.setupEventListeners();
+            }
+
+            connect() {
+                const wsUrl = `ws://${window.location.host}/ws`;
+                this.ws = new WebSocket(wsUrl);
+
+                this.ws.onopen = () => {
+                    this.connectionStatus.textContent = 'Conectado';
+                    this.connectionStatus.className = 'connection-status connected';
+                    this.messageInput.disabled = false;
+                    this.sendButton.disabled = false;
+                    this.messageInput.focus();
+                };
+
+                this.ws.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    this.handleMessage(data);
+                };
+
+                this.ws.onclose = () => {
+                    this.connectionStatus.textContent = 'Desconectado';
+                    this.connectionStatus.className = 'connection-status disconnected';
+                    this.messageInput.disabled = true;
+                    this.sendButton.disabled = true;
+                    
+                    // Try to reconnect after 3 seconds
+                    setTimeout(() => {
+                        this.connectionStatus.textContent = 'Reconectando...';
+                        this.connect();
+                    }, 3000);
+                };
+
+                this.ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                    this.connectionStatus.textContent = 'Erro de conexão';
+                    this.connectionStatus.className = 'connection-status error';
+                };
+            }
+
+            setupEventListeners() {
+                this.sendButton.addEventListener('click', () => this.sendMessage());
+                
+                this.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+
+                // Auto-resize textarea
+                this.messageInput.addEventListener('input', (e) => {
+                    e.target.style.height = 'auto';
+                    e.target.style.height = e.target.scrollHeight + 'px';
+                });
+            }
+
+            sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message || this.ws.readyState !== WebSocket.OPEN) {
+                    return;
+                }
+
+                // Add user message to chat
+                this.addMessage(message, 'user');
+
+                // Send to server
+                this.ws.send(JSON.stringify({ message }));
+
+                // Clear input
+                this.messageInput.value = '';
+                this.messageInput.style.height = 'auto';
+
+                // Show typing indicator
+                this.showTypingIndicator();
+            }
+
+            handleMessage(data) {
+                this.hideTypingIndicator();
+                
+                if (data.type === 'answer') {
+                    this.addMessage(data.message, 'assistant');
+                }
+            }
+
+            addMessage(content, sender) {
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${sender}`;
+
+                const contentElement = document.createElement('div');
+                contentElement.className = 'message-content';
+                
+                if (sender === 'assistant') {
+                    // Format AI responses with better text formatting
+                    contentElement.innerHTML = this.formatAIResponse(content);
+                } else {
+                    contentElement.textContent = content;
+                }
+
+                const timestampElement = document.createElement('div');
+                timestampElement.className = 'message-timestamp';
+                timestampElement.textContent = new Date().toLocaleTimeString('pt-BR');
+
+                messageElement.appendChild(contentElement);
+                messageElement.appendChild(timestampElement);
+
+                this.chatMessages.appendChild(messageElement);
+                this.scrollToBottom();
+            }
+
+            showTypingIndicator() {
+                const typingElement = document.createElement('div');
+                typingElement.className = 'message assistant typing';
+                typingElement.id = 'typing-indicator';
+                
+                const contentElement = document.createElement('div');
+                contentElement.className = 'message-content';
+                
+                const dotsElement = document.createElement('div');
+                dotsElement.className = 'typing-dots';
+                dotsElement.innerHTML = '<span></span><span></span><span></span>';
+                
+                contentElement.appendChild(dotsElement);
+                typingElement.appendChild(contentElement);
+                
+                this.chatMessages.appendChild(typingElement);
+                this.scrollToBottom();
+            }
+
+            hideTypingIndicator() {
+                const typingIndicator = document.getElementById('typing-indicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+
+            scrollToBottom() {
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            }
+
+            formatAIResponse(content) {
+                // Escape HTML first
+                let formattedContent = content
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+
+                // Format code blocks (```code```)
+                formattedContent = formattedContent.replace(
+                    /```([\s\S]*?)```/g, 
+                    '<div class="code-block"><pre><code>$1</code></pre></div>'
+                );
+
+                // Format inline code (`code`)
+                formattedContent = formattedContent.replace(
+                    /`([^`]+)`/g, 
+                    '<code class="inline-code">$1</code>'
+                );
+
+                // Format bold text (**text**)
+                formattedContent = formattedContent.replace(
+                    /\*\*(.*?)\*\*/g, 
+                    '<strong>$1</strong>'
+                );
+
+                // Format italic text (*text*)
+                formattedContent = formattedContent.replace(
+                    /\*(.*?)\*/g, 
+                    '<em>$1</em>'
+                );
+
+                // Add paragraph breaks for double line breaks
+                formattedContent = formattedContent.replace(/\n\n/g, '</p><p>');
+                
+                // Wrap in paragraph tags if there are paragraph breaks
+                if (formattedContent.includes('</p><p>')) {
+                    formattedContent = '<p>' + formattedContent + '</p>';
+                } else {
+                    // Just replace single line breaks with <br>
+                    formattedContent = formattedContent.replace(/\n/g, '<br>');
+                }
+
+                return formattedContent;
+            }
+        }
+
+        // Initialize chat app when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new ChatApp();
+        });
+    </script>
+</body>
+</html>

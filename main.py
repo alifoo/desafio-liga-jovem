@@ -5,6 +5,8 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import re
+import glob
+from pathlib import Path
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
@@ -19,6 +21,7 @@ class SimplePDFRAG:
 
         self.chunks = []
         self.embeddings = []
+        self.chunk_sources = []
 
     def extract_text_from_pdf(self, pdf_path):
         """Extract text from PDF file"""
@@ -59,12 +62,36 @@ class SimplePDFRAG:
         text = self.extract_text_from_pdf(pdf_path)
 
         # create chunks
-        self.chunks = self.chunk_text(text)
-        print(f"Created {len(self.chunks)} chunks")
+        pdf_chunks = self.chunk_text(text)
+        
+        # add to existing chunks with source tracking
+        filename = Path(pdf_path).name
+        for chunk in pdf_chunks:
+            self.chunks.append(chunk)
+            self.chunk_sources.append(filename)
+        
+        print(f"Added {len(pdf_chunks)} chunks from {filename}")
 
-        # generate embeddings
+        # regenerate embeddings for all chunks
         self.embeddings = self.embedder.encode(self.chunks)
-        print("Generated embeddings")
+        print(f"Total chunks: {len(self.chunks)}")
+
+    def load_folder(self, folder_path):
+        """Load all PDFs from a folder"""
+        self.chunks = []
+        self.embeddings = []
+        self.chunk_sources = []
+        
+        pdf_files = glob.glob(os.path.join(folder_path, "*.pdf"))
+        
+        if not pdf_files:
+            print("No PDF files found in folder")
+            return
+            
+        for pdf_path in pdf_files:
+            self.load_pdf(pdf_path)
+        
+        print(f"Loaded {len(pdf_files)} PDF files with {len(self.chunks)} total chunks")
 
     def retrieve_relevant_chunks(self, query, top_k=3):
         """Retrieve most relevant chunks for query"""
@@ -82,28 +109,39 @@ class SimplePDFRAG:
     def chat(self, question):
         """Chat with the PDF content using Gemini"""
         if not self.chunks:
-            return "No PDF loaded. Please load a PDF first."
+            return "Olá! 👋 Ainda não temos materiais da aula carregados no sistema. Por favor, peça ao seu professor para enviar os documentos da aula para que eu possa ajudá-lo com suas dúvidas."
 
         # retrieve relevant context
         relevant_chunks = self.retrieve_relevant_chunks(question)
         context = "\n\n".join(relevant_chunks)
 
         # create prompt
-        prompt = f"""Based on the following context from a PDF document, answer the question.
+        prompt = f"""Você é um assistente de ensino inteligente do ClassDocs, auxiliando estudantes durante a aula. Sua função é ajudar os alunos a compreender melhor o conteúdo dos materiais didáticos fornecidos pelo professor.
 
-Context:
+INSTRUÇÕES IMPORTANTES:
+- Responda como um professor assistente, de forma didática e educativa
+- Use linguagem clara e adequada para estudantes
+- Explique conceitos de forma pedagógica quando possível
+- Incentive o aprendizado e a curiosidade
+- Mantenha um tom respeitoso e encorajador
+- Se a pergunta não estiver relacionada ao contexto dos documentos, informe educadamente que só pode ajudar com o conteúdo da aula
+
+CONTEXTO DOS MATERIAIS DA AULA:
 {context}
 
-Question: {question}
+PERGUNTA DO ESTUDANTE: {question}
 
-Answer based only on the provided context. If the answer is not in the context, say "I cannot find this information in the provided document."
-"""
+Se você encontrar a informação no contexto, responda de forma didática e educativa. Se não houver informação suficiente no material fornecido, responda:
+
+"Desculpe, não encontrei essa informação específica nos materiais da aula disponíveis. Recomendo que você chame o professor para esclarecer essa dúvida, pois ele poderá fornecer uma explicação mais completa sobre esse tópico. 🙋‍♂️"
+
+RESPOSTA:"""
 
         try:
             response = self.model.generate_content(prompt)
             return response.text
         except Exception as e:
-            return f"Error generating response: {str(e)}"
+            return f"Erro ao gerar resposta: {str(e)}"
 
 
 def main():

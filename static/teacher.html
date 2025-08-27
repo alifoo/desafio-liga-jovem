@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Professor - ClassDocs</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Painel do Professor</h1>
+            <nav>
+                <a href="/" class="btn btn-secondary">Início</a>
+                <a href="/student" class="btn btn-secondary">Área do Estudante</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <h2>Enviar Documentos</h2>
+                
+                <div id="dropZone" class="drop-zone">
+                    <div class="drop-content">
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7,10 12,15 17,10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <p>Arraste e solte arquivos PDF aqui</p>
+                        <p class="or-text">ou</p>
+                        <button type="button" class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                            📁 Escolher Arquivos
+                        </button>
+                        <input type="file" id="fileInput" multiple accept=".pdf" style="display: none;">
+                    </div>
+                </div>
+
+                <div id="uploadStatus" class="upload-status"></div>
+            </section>
+
+            <section class="documents-section">
+                <h2>Documentos Enviados</h2>
+                <div id="documentsList" class="documents-list">
+                    <p class="loading">Carregando documentos...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadStatus = document.getElementById('uploadStatus');
+        const documentsList = document.getElementById('documentsList');
+
+        // Drag and drop functionality
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            
+            const files = Array.from(e.dataTransfer.files);
+            const pdfFiles = files.filter(file => file.type === 'application/pdf');
+            
+            if (pdfFiles.length > 0) {
+                uploadFiles(pdfFiles);
+            } else {
+                showStatus('Por favor, selecione apenas arquivos PDF.', 'error');
+            }
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length > 0) {
+                uploadFiles(files);
+            }
+        });
+
+        async function uploadFiles(files) {
+            uploadStatus.innerHTML = '';
+            
+            for (let file of files) {
+                await uploadFile(file);
+            }
+            
+            loadDocuments();
+        }
+
+        async function uploadFile(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                showStatus(`Enviando ${file.name}...`, 'info');
+                
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showStatus(`✅ ${file.name} enviado com sucesso`, 'success');
+                } else {
+                    showStatus(`❌ Falha ao enviar ${file.name}: ${result.detail}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Erro ao enviar ${file.name}: ${error.message}`, 'error');
+            }
+        }
+
+        function showStatus(message, type) {
+            const statusElement = document.createElement('div');
+            statusElement.className = `status ${type}`;
+            statusElement.textContent = message;
+            uploadStatus.appendChild(statusElement);
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    statusElement.remove();
+                }, 3000);
+            }
+        }
+
+        async function loadDocuments() {
+            try {
+                const response = await fetch('/documents');
+                const data = await response.json();
+                
+                if (data.documents.length === 0) {
+                    documentsList.innerHTML = '<p class="no-documents">Nenhum documento enviado ainda.</p>';
+                    return;
+                }
+                
+                documentsList.innerHTML = data.documents.map(doc => `
+                    <div class="document-item">
+                        <div class="document-info">
+                            <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                            </svg>
+                            <span class="document-name">${doc}</span>
+                        </div>
+                        <button class="btn btn-danger btn-small" onclick="deleteDocument('${doc}')">
+                            🗑️ Excluir
+                        </button>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                documentsList.innerHTML = '<p class="error">Erro ao carregar documentos.</p>';
+            }
+        }
+
+        async function deleteDocument(filename) {
+            if (!confirm(`Tem certeza que deseja excluir ${filename}?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/documents/${filename}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    showStatus(`✅ ${filename} excluído com sucesso`, 'success');
+                    loadDocuments();
+                } else {
+                    const result = await response.json();
+                    showStatus(`❌ Falha ao excluir ${filename}: ${result.detail}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Erro ao excluir ${filename}: ${error.message}`, 'error');
+            }
+        }
+
+        // Load documents on page load
+        loadDocuments();
+    </script>
+</body>
+</html>
