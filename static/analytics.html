@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Institucionais - ClassDocs</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Analytics Institucionais</h1>
+            <nav>
+                <a href="/" class="btn btn-secondary">🏠 Início</a>
+                <a href="/teacher" class="btn btn-secondary">👨‍🏫 Área do Professor</a>
+                <div class="plan-badge">
+                    <span class="premium-badge">✨ Plano Premium</span>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Métricas Principais -->
+            <section class="metrics-section">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">🎯</div>
+                        <div class="metric-content">
+                            <h3>1.247</h3>
+                            <p>Perguntas esta semana</p>
+                            <span class="metric-change positive">+23% vs. semana anterior</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">👥</div>
+                        <div class="metric-content">
+                            <h3>89</h3>
+                            <p>Estudantes ativos</p>
+                            <span class="metric-change positive">+12% vs. semana anterior</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">📚</div>
+                        <div class="metric-content">
+                            <h3>15</h3>
+                            <p>Disciplinas ativas</p>
+                            <span class="metric-change">Estável</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">⚡</div>
+                        <div class="metric-content">
+                            <h3>2.3 min</h3>
+                            <p>Tempo médio de resposta</p>
+                            <span class="metric-change positive">-15% vs. semana anterior</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dúvidas Mais Frequentes -->
+            <section class="analytics-section">
+                <h2>🔍 Tópicos com Mais Dúvidas</h2>
+                <div class="chart-container">
+                    <canvas id="topicsChart" width="400" height="200"></canvas>
+                </div>
+            </section>
+
+            <!-- Tendências e Padrões -->
+            <div class="analytics-grid">
+                <section class="analytics-section">
+                    <h2>📈 Tendência de Perguntas</h2>
+                    <div class="chart-container">
+                        <canvas id="trendsChart" width="400" height="200"></canvas>
+                    </div>
+                </section>
+
+                <section class="analytics-section">
+                    <h2>🕐 Horários de Pico</h2>
+                    <div class="chart-container">
+                        <canvas id="hoursChart" width="400" height="200"></canvas>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Insights Inteligentes -->
+            <section class="insights-section">
+                <h2>🤖 Insights Inteligentes</h2>
+                <div class="insights-grid">
+                    <div class="insight-card alert">
+                        <div class="insight-icon">⚠️</div>
+                        <div class="insight-content">
+                            <h4>Atenção: Tópico com Alta Dificuldade</h4>
+                            <p><strong>Equações de 2º Grau</strong> teve 78% mais dúvidas que o normal. Considere uma aula de reforço.</p>
+                            <span class="insight-subject">Matemática • 9º Ano A</span>
+                        </div>
+                    </div>
+                    <div class="insight-card success">
+                        <div class="insight-icon">✅</div>
+                        <div class="insight-content">
+                            <h4>Progresso Positivo</h4>
+                            <p><strong>Células Vegetais</strong> mostrou redução de 45% nas dúvidas após a última explicação.</p>
+                            <span class="insight-subject">Biologia • 7º Ano B</span>
+                        </div>
+                    </div>
+                    <div class="insight-card info">
+                        <div class="insight-icon">💡</div>
+                        <div class="insight-content">
+                            <h4>Oportunidade de Melhoria</h4>
+                            <p>Estudantes fazem 40% mais perguntas sobre <strong>Interpretação de Texto</strong> após 16h.</p>
+                            <span class="insight-subject">Português • Geral</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Relatório Detalhado -->
+            <section class="report-section">
+                <h2>📋 Relatório Semanal Detalhado</h2>
+                <div class="report-table-container">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Disciplina</th>
+                                <th>Tópico</th>
+                                <th>Dúvidas</th>
+                                <th>Taxa de Sucesso</th>
+                                <th>Recomendação</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="subject-tag math">Matemática</span></td>
+                                <td>Equações de 2º Grau</td>
+                                <td><span class="high-count">156</span></td>
+                                <td><span class="rate-low">67%</span></td>
+                                <td>⚠️ Reforço necessário</td>
+                                <td><button class="btn-action">📝 Agendar Reforço</button></td>
+                            </tr>
+                            <tr>
+                                <td><span class="subject-tag science">Física</span></td>
+                                <td>Leis de Newton</td>
+                                <td><span class="medium-count">89</span></td>
+                                <td><span class="rate-medium">78%</span></td>
+                                <td>💡 Material adicional</td>
+                                <td><button class="btn-action">📚 Ver Recursos</button></td>
+                            </tr>
+                            <tr>
+                                <td><span class="subject-tag lang">Português</span></td>
+                                <td>Análise Sintática</td>
+                                <td><span class="medium-count">73</span></td>
+                                <td><span class="rate-good">85%</span></td>
+                                <td>✅ Progresso normal</td>
+                                <td><button class="btn-action">📊 Ver Detalhes</button></td>
+                            </tr>
+                            <tr>
+                                <td><span class="subject-tag bio">Biologia</span></td>
+                                <td>Fotossíntese</td>
+                                <td><span class="low-count">31</span></td>
+                                <td><span class="rate-excellent">92%</span></td>
+                                <td>🎉 Excelente compreensão</td>
+                                <td><button class="btn-action">⭐ Reconhecer</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Call to Action -->
+            <section class="cta-section">
+                <div class="cta-content">
+                    <h2>🚀 Potencialize sua Instituição com ClassDocs Premium</h2>
+                    <p>Identifique lacunas de aprendizado, otimize o ensino e acompanhe o progresso em tempo real.</p>
+                    <div class="cta-buttons">
+                        <button class="btn btn-primary cta-btn">📞 Agendar Demonstração</button>
+                        <button class="btn btn-secondary cta-btn">💼 Ver Planos Institucionais</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Dados simulados para os gráficos
+        
+        // Gráfico de Tópicos com Mais Dúvidas
+        const topicsCtx = document.getElementById('topicsChart').getContext('2d');
+        new Chart(topicsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Equações 2º Grau', 'Leis de Newton', 'Análise Sintática', 'Fotossíntese', 'Guerra Fria'],
+                datasets: [{
+                    label: 'Número de Dúvidas',
+                    data: [156, 89, 73, 31, 45],
+                    backgroundColor: ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6'],
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Gráfico de Tendências
+        const trendsCtx = document.getElementById('trendsChart').getContext('2d');
+        new Chart(trendsCtx, {
+            type: 'line',
+            data: {
+                labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                datasets: [{
+                    label: 'Perguntas por Dia',
+                    data: [180, 220, 195, 267, 189, 92, 45],
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Gráfico de Horários de Pico
+        const hoursCtx = document.getElementById('hoursChart').getContext('2d');
+        new Chart(hoursCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['8h-12h', '12h-16h', '16h-20h', '20h-24h'],
+                datasets: [{
+                    data: [25, 35, 30, 10],
+                    backgroundColor: ['#60a5fa', '#3b82f6', '#2563eb', '#1d4ed8'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
+        });
+    </script>
+</body>
+</html>

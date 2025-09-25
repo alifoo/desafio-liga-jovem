@@ -62,6 +62,29 @@ async def teacher_view():
 async def student_view():
     return FileResponse(f"{STATIC_DIR}/student.html")
 
+@app.get("/analytics")
+async def analytics_view():
+    return FileResponse(f"{STATIC_DIR}/analytics.html")
+
+@app.get("/premium", response_class=HTMLResponse)
+async def premium_home():
+    return """
+    <html>
+        <head><title>ClassDocs - Plataforma Educacional</title></head>
+        <body style="font-family: Arial, sans-serif; text-align: center; margin-top: 100px; background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%); min-height: 100vh; color: white;">
+            <div style="padding: 40px;">
+                <h1 style="font-size: 3rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">📚 ClassDocs</h1>
+                <p style="font-size: 1.2rem; margin-bottom: 50px; opacity: 0.9;">Plataforma Educacional com IA</p>
+                <div style="margin: 50px;">
+                    <a href="/teacher" style="display: inline-block; padding: 20px 40px; margin: 10px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); transition: all 0.3s; font-weight: 600;">👨‍🏫 Área do Professor</a>
+                    <a href="/student" style="display: inline-block; padding: 20px 40px; margin: 10px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); transition: all 0.3s; font-weight: 600;">🎓 Área do Estudante</a>
+                    <a href="/analytics" style="display: inline-block; padding: 20px 40px; margin: 10px; background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); color: white; text-decoration: none; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(251, 191, 36, 0.5); transition: all 0.3s; font-weight: 600; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);">📊 Analytics Premium</a>
+                </div>
+            </div>
+        </body>
+    </html>
+    """
+
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
     if not file.filename.endswith('.pdf'):
