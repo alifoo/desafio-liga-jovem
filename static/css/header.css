@@ -1,0 +1,86 @@
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 0;
+    border-bottom: 2px solid var(--borda-transparente);
+    margin-bottom: 40px;
+    backdrop-filter: blur(10px);
+}
+
+header h1 {
+    color: var(--texto-cor-branco);
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: var(--sombra-texto);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+header h1::before {
+    content: '📚';
+    font-size: 2rem;
+}
+
+nav {
+    display: flex;
+    gap: 10px;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--botao-primario-inicio) 0%, var(--botao-primario-fim) 100%);
+    color: var(--texto-cor-branco);
+    box-shadow: var(--sombra-card);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--botao-primario-hover-inicio) 0%, var(--botao-primario-hover-fim) 100%);
+    box-shadow: var(--sombra-card-hover);
+}
+
+.btn-secondary {
+    background: var(--fundo-branco-semi);
+    color: var(--texto-cor-branco);
+    border: 1px solid var(--borda-transparente);
+    backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+    background: var(--fundo-branco-hover);
+    border: 1px solid var(--borda-transparente-hover);
+}
+
+.btn-danger {
+    background: var(--erro-cor);
+    color: var(--texto-cor-branco);
+}
+
+.btn-danger:hover {
+    background: var(--erro-hover);
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 12px;
+}
