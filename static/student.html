@@ -12,18 +12,19 @@
 <body>
     <div class="container">
         <header>
-            <h1>Chat do Estudante</h1>
             <nav>
                 <a href="/" class="btn btn-secondary">Início</a>
                 <a href="/teacher.html" class="btn btn-secondary">Área do Professor</a>
             </nav>
+            <h1>Chat do Estudante</h1>
+            
         </header>
 
         <main class="chat-main">
             <div class="chat-container">
                 <div id="chatMessages" class="chat-messages">
                     <div class="system-message">
-                        <p>👋 Olá! Sou seu assistente de ensino do ClassDocs.</p>
+                        <p>Olá! Sou seu assistente de ensino do ClassDocs.</p>
                         <p>Faça perguntas sobre o conteúdo da aula e eu te ajudarei a aprender!</p>
                         <p class="connection-status" id="connectionStatus">Conectando...</p>
                     </div>
@@ -122,6 +123,11 @@
                 const message = this.messageInput.value.trim();
                 if (!message || this.ws.readyState !== WebSocket.OPEN) {
                     return;
+                }
+
+                const systemMessage = document.querySelector('.system-message');
+                if (systemMessage) {
+                    systemMessage.remove();
                 }
 
                 // Add user message to chat

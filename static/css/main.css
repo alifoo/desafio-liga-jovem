@@ -161,7 +161,7 @@ main {
     border: 1px solid var(--borda-transparente);
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 200px);
+    height: 100%;
     min-height: 500px;
 }
 
@@ -412,12 +412,6 @@ main {
 @media (max-width: 768px) {
     .container {
         padding: 15px;
-    }
-
-    header {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
     }
 
     .upload-section,
