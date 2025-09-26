@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preços e Integração - ClassDocs</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="/static/js/icons.js"></script>
+    <style>
+        .pricing-hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
+            color: white;
+            margin-bottom: 60px;
+        }
+        
+        .pricing-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+        
+        .pricing-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .comparison-section {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .comparison-table th {
+            background: var(--main-bg);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .comparison-table .classdocs-col {
+            background: rgba(59, 130, 246, 0.05);
+            border-left: 3px solid var(--accent-color);
+        }
+        
+        .check-icon {
+            color: #10b981;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .x-icon {
+            color: #ef4444;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .partial-icon {
+            color: #f59e0b;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        
+        .pricing-card {
+            background: var(--input-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pricing-card.popular {
+            border-color: var(--accent-color);
+            background: var(--main-bg);
+        }
+        
+        .pricing-card.popular::before {
+            content: "Mais Popular";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-color);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+        }
+        
+        .plan-period {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+        
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .plan-features li {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            color: var(--text-secondary);
+        }
+        
+        .plan-features li i {
+            margin-right: 12px;
+            color: var(--accent-color);
+        }
+        
+        .integration-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 16px;
+            padding: 50px 40px;
+            margin: 60px 0;
+        }
+        
+        .integration-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .integration-step {
+            background: white;
+            border-radius: 12px;
+            padding: 30px 25px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .step-number {
+            background: var(--accent-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 20px auto;
+        }
+        
+        .lms-logos {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .lms-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            min-width: 120px;
+        }
+        
+        .lms-logo i {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 12px;
+        }
+        
+        
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 50px 0;
+            flex-wrap: wrap;
+        }
+        
+        .security-badge {
+            display: flex;
+            align-items: center;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px 20px;
+            gap: 12px;
+        }
+        
+        .faq-section {
+            margin-top: 60px;
+        }
+        
+        .faq-item {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .faq-answer {
+            padding: 0 20px 20px 20px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .pricing-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .comparison-table {
+                font-size: 14px;
+            }
+            
+            .comparison-table th,
+            .comparison-table td {
+                padding: 12px 8px;
+            }
+            
+            
+            .plan-price {
+                font-size: 2.5rem;
+            }
+            
+            /* Responsive integration phases */
+            .integration-section [style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+        }
+        
+        /* Simple CTA Button Hover Effects */
+        button[onclick="scheduleDemo()"]:hover {
+            transform: scale(1.05);
+        }
+        
+        button[onclick="contactExpert()"]:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.1) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="chatgpt-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="sidebar-logo">ClassDocs</a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Navegação</div>
+                    <a href="/" class="nav-item">
+                        <i data-lucide="home" class="nav-item-icon"></i>
+                        Início
+                    </a>
+                    <a href="/teacher" class="nav-item">
+                        <i data-lucide="graduation-cap" class="nav-item-icon"></i>
+                        Área do Professor
+                    </a>
+                    <a href="/student" class="nav-item">
+                        <i data-lucide="user" class="nav-item-icon"></i>
+                        Área do Estudante
+                    </a>
+                    <a href="/analytics" class="nav-item">
+                        <i data-lucide="bar-chart-3" class="nav-item-icon"></i>
+                        Analytics
+                    </a>
+                    <a href="/pricing" class="nav-item active">
+                        <i data-lucide="credit-card" class="nav-item-icon"></i>
+                        Preços & Integração
+                    </a>
+                    <a href="/api/docs" class="nav-item" target="_blank">
+                        <i data-lucide="code" class="nav-item-icon"></i>
+                        API Integration
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">CD</div>
+                    <div class="user-info">
+                        <div class="user-name">ClassDocs</div>
+                        <div class="user-plan">Pricing Demo</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="pricing-hero">
+                <h1>Integre IA no Seu LMS Atual</h1>
+                <p>A única plataforma que adiciona inteligência artificial contextualizada ao seu sistema educacional existente, sem complicação.</p>
+            </div>
+
+            <div class="main-content-area">
+                <div class="content-wrapper">
+                    
+                    <!-- Comparação Competitiva -->
+                    <section class="comparison-section">
+                        <h2 style="text-align: center; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 12px;">
+                            <i data-lucide="trophy" style="color: var(--accent-color); width: 24px; height: 24px; flex-shrink: 0;"></i>
+                            <span>Por que ClassDocs é Diferente?</span>
+                        </h2>
+                        <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">
+                            Comparação com principais concorrentes do mercado
+                        </p>
+                        
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Recurso</th>
+                                    <th class="classdocs-col">ClassDocs</th>
+                                    <th>Passei Direto</th>
+                                    <th>Tutor Mundi</th>
+                                    <th>Descomplica</th>
+                                    <th>Stoodi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Conteúdo Contextualizado</strong></td>
+                                    <td class="classdocs-col">
+                                        <i data-lucide="check" class="check-icon"></i>
+                                        Material específico do professor
+                                    </td>
+                                    <td>
+                                        <i data-lucide="minus" class="partial-icon"></i>
+                                        Materiais compartilhados
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        Apenas via tutor
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        Videoaulas padronizadas
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        Foco vestibular/ENEM
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Integração LMS</strong></td>
+                                    <td class="classdocs-col">
+                                        <i data-lucide="check" class="check-icon"></i>
+                                        LTI + APIs nativas
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        Plataforma própria
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        App independente
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        Plataforma própria
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        Plataforma própria
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Foco na Barreira Psicológica</strong></td>
+                                    <td class="classdocs-col">
+                                        <i data-lucide="check" class="check-icon"></i>
+                                        Ambiente seguro, sem julgamento
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        Rede social de estudos
+                                    </td>
+                                    <td>
+                                        <i data-lucide="minus" class="partial-icon"></i>
+                                        Chat 1:1 (pode intimidar)
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        Ensino massificado
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        Exercícios automatizados
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Analytics Pedagógicos</strong></td>
+                                    <td class="classdocs-col">
+                                        <i data-lucide="check" class="check-icon"></i>
+                                        Insights específicos do conteúdo
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        Dados básicos de uso
+                                    </td>
+                                    <td>
+                                        <i data-lucide="minus" class="partial-icon"></i>
+                                        Relatórios de sessão
+                                    </td>
+                                    <td>
+                                        <i data-lucide="minus" class="partial-icon"></i>
+                                        Dashboard básico
+                                    </td>
+                                    <td>
+                                        <i data-lucide="minus" class="partial-icon"></i>
+                                        Relatórios simples
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Público-Alvo</strong></td>
+                                    <td class="classdocs-col">
+                                        <i data-lucide="check" class="check-icon"></i>
+                                        Ensino superior/técnico
+                                    </td>
+                                    <td>
+                                        <i data-lucide="minus" class="partial-icon"></i>
+                                        Universitários brasileiros
+                                    </td>
+                                    <td>
+                                        <i data-lucide="minus" class="partial-icon"></i>
+                                        Ensino médio/superior
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        Ensino médio/vestibular
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        Ensino médio/ENEM
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Modelo de Negócio</strong></td>
+                                    <td class="classdocs-col">
+                                        <i data-lucide="check" class="check-icon"></i>
+                                        B2B2C Institucional
+                                    </td>
+                                    <td>
+                                        <i data-lucide="minus" class="partial-icon"></i>
+                                        Freemium + Premium
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        B2C por hora/sessão
+                                    </td>
+                                    <td>
+                                        <i data-lucide="minus" class="partial-icon"></i>
+                                        B2C + B2B escolas
+                                    </td>
+                                    <td>
+                                        <i data-lucide="x" class="x-icon"></i>
+                                        B2C Individual
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- Como Funciona a Integração -->
+                    <section class="integration-section">
+                        <h2 style="text-align: center; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 12px;">
+                            <i data-lucide="zap" style="color: var(--accent-color); width: 24px; height: 24px; flex-shrink: 0;"></i>
+                            <span>Integração Realista e Escalável</span>
+                        </h2>
+                        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 40px; font-size: 1.1rem;">
+                            Não quer utilizar a plataforma diretamente? Realizamos a integração com o seu sistema educacional atual
+                        </p>
+
+                        <!-- Fases de Implementação -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px;">
+                            <div style="background: rgba(16, 185, 129, 0.05); border: 2px solid rgba(16, 185, 129, 0.2); border-radius: 16px; padding: 25px;">
+                                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                    <div style="background: #10b981; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">✓</div>
+                                    <h3 style="margin: 0; color: #065f46;">Integração Rápida</h3>
+                                </div>
+                                <div class="lms-logos" style="gap: 15px; margin: 0; justify-content: center;">
+                                    <div class="lms-logo" style="border: 1px solid #10b981; padding: 12px; min-width: 90px; width: 90px; height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                        <i data-lucide="chrome" style="color: #10b981; font-size: 1.8rem; margin-bottom: 8px;"></i>
+                                        <strong style="font-size: 0.8rem; text-align: center; line-height: 1.2;">Google<br>Classroom</strong>
+                                    </div>
+                                    <div class="lms-logo" style="border: 1px solid #10b981; padding: 12px; min-width: 90px; width: 90px; height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                        <i data-lucide="monitor" style="color: #10b981; font-size: 1.8rem; margin-bottom: 8px;"></i>
+                                        <strong style="font-size: 0.8rem; text-align: center; line-height: 1.2;">Canvas</strong>
+                                    </div>
+                                    <div class="lms-logo" style="border: 1px solid #10b981; padding: 12px; min-width: 90px; width: 90px; height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                        <i data-lucide="graduation-cap" style="color: #10b981; font-size: 1.8rem; margin-bottom: 8px;"></i>
+                                        <strong style="font-size: 0.8rem; text-align: center; line-height: 1.2;">Moodle</strong>
+                                    </div>
+                                </div>
+                                <p style="margin-top: 15px; font-size: 0.9rem; color: #065f46; margin-bottom: 0;">Plataformas com implementação mais ágil e APIs bem documentadas</p>
+                            </div>
+                            
+                            <div style="background: rgba(245, 158, 11, 0.05); border: 2px solid rgba(245, 158, 11, 0.2); border-radius: 16px; padding: 25px;">
+                                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                    <div style="background: #f59e0b; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 12px;">⚡</div>
+                                    <h3 style="margin: 0; color: #92400e;">Integração Enterprise</h3>
+                                </div>
+                                <div class="lms-logos" style="gap: 15px; margin: 0; justify-content: center;">
+                                    <div class="lms-logo" style="border: 1px solid #f59e0b; padding: 12px; min-width: 90px; width: 90px; height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                        <i data-lucide="users" style="color: #f59e0b; font-size: 1.8rem; margin-bottom: 8px;"></i>
+                                        <strong style="font-size: 0.8rem; text-align: center; line-height: 1.2;">Teams<br>Education</strong>
+                                    </div>
+                                    <div class="lms-logo" style="border: 1px solid #f59e0b; padding: 12px; min-width: 90px; width: 90px; height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                        <i data-lucide="book-open" style="color: #f59e0b; font-size: 1.8rem; margin-bottom: 8px;"></i>
+                                        <strong style="font-size: 0.8rem; text-align: center; line-height: 1.2;">Blackboard</strong>
+                                    </div>
+                                </div>
+                                <p style="margin-top: 15px; font-size: 0.9rem; color: #92400e; margin-bottom: 0;">Soluções corporativas que exigem processos de certificação e parcerias</p>
+                            </div>
+                        </div>
+
+                        <div class="integration-steps">
+                            <div class="integration-step">
+                                <div class="step-number">1</div>
+                                <h3>Padrão LTI</h3>
+                                <p>Implementamos LTI (Learning Tools Interoperability) - padrão da indústria que funciona com qualquer LMS moderno. Compatibilidade universal garantida.</p>
+                            </div>
+                            <div class="integration-step">
+                                <div class="step-number">2</div>
+                                <h3>Integração Nativa</h3>
+                                <p>Desenvolvemos APIs específicas para cada plataforma prioritária, otimizando a experiência do usuário e maximizando as funcionalidades disponíveis.</p>
+                            </div>
+                            <div class="integration-step">
+                                <div class="step-number">3</div>
+                                <h3>Expansão Gradual</h3>
+                                <p>Adicionamos novas plataformas conforme demanda dos clientes, sempre priorizando qualidade sobre velocidade na implementação.</p>
+                            </div>
+                        </div>
+                        
+                        <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 20px; margin-top: 30px; text-align: center;">
+                            <p style="margin: 0; font-weight: 600; color: #1e40af; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                <i data-lucide="info" style="color: #3b82f6; width: 20px; height: 20px; flex-shrink: 0;"></i>
+                                <span>Nossa equipe técnica cuida de toda a integração para você - sem complicações para sua equipe de TI</span>
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Planos e Preços -->
+                    <section>
+                        <h2 style="text-align: center; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 12px;">
+                            <i data-lucide="credit-card" style="color: var(--accent-color); width: 24px; height: 24px; flex-shrink: 0;"></i>
+                            <span>Planos Adaptados para Instituições</span>
+                        </h2>
+                        <p style="text-align: center; color: var(--text-muted); margin-bottom: 50px;">
+                            Preços por estudante ativo, sem taxa de setup, cancelamento gratuito
+                        </p>
+                        
+                        <div class="pricing-grid">
+                            <div class="pricing-card">
+                                <div class="plan-name">Starter</div>
+                                <div class="plan-price">R$ 2,50</div>
+                                <div class="plan-period">por estudante/mês</div>
+                                
+                                <ul class="plan-features">
+                                    <li><i data-lucide="check"></i> Até 500 estudantes</li>
+                                    <li><i data-lucide="check"></i> 3 cursos simultâneos</li>
+                                    <li><i data-lucide="check"></i> Integração básica LMS</li>
+                                    <li><i data-lucide="check"></i> Upload ilimitado documentos</li>
+                                    <li><i data-lucide="check"></i> Chat IA 24/7</li>
+                                    <li><i data-lucide="check"></i> Analytics básicos</li>
+                                    <li><i data-lucide="check"></i> Suporte por email</li>
+                                </ul>
+                                
+                                <button class="btn btn-secondary" style="width: 100%; padding: 16px; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 25px;" onclick="startFreeTrial('starter')">
+                                    <i data-lucide="play-circle"></i>
+                                    Iniciar Teste Gratuito
+                                </button>
+                                <p style="text-align: center; font-size: 0.9rem; color: var(--text-muted); margin-top: 12px;">
+                                    30 dias grátis • Sem cartão de crédito
+                                </p>
+                            </div>
+                            
+                            <div class="pricing-card popular">
+                                <div class="plan-name">Professional</div>
+                                <div class="plan-price">R$ 4,90</div>
+                                <div class="plan-period">por estudante/mês</div>
+                                
+                                <ul class="plan-features">
+                                    <li><i data-lucide="check"></i> Até 2.000 estudantes</li>
+                                    <li><i data-lucide="check"></i> Cursos ilimitados</li>
+                                    <li><i data-lucide="check"></i> Integração avançada + API</li>
+                                    <li><i data-lucide="check"></i> Analytics avançados</li>
+                                    <li><i data-lucide="check"></i> Dashboards personalizados</li>
+                                    <li><i data-lucide="check"></i> Insights pedagógicos</li>
+                                    <li><i data-lucide="check"></i> Suporte prioritário</li>
+                                    <li><i data-lucide="check"></i> Treinamento incluído</li>
+                                </ul>
+                                
+                                <button class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--accent-color); border: none; border-radius: 25px;" onclick="startFreeTrial('professional')">
+                                    <i data-lucide="rocket"></i>
+                                    Começar Agora
+                                </button>
+                                <p style="text-align: center; font-size: 0.9rem; color: var(--text-muted); margin-top: 12px;">
+                                    Teste grátis + Setup incluído
+                                </p>
+                            </div>
+                            
+                            <div class="pricing-card">
+                                <div class="plan-name">Enterprise</div>
+                                <div class="plan-price">R$ 7,90</div>
+                                <div class="plan-period">por estudante/mês</div>
+                                
+                                <ul class="plan-features">
+                                    <li><i data-lucide="check"></i> Estudantes ilimitados</li>
+                                    <li><i data-lucide="check"></i> IA personalizada</li>
+                                    <li><i data-lucide="check"></i> SSO + Compliance LGPD</li>
+                                    <li><i data-lucide="check"></i> Deploy on-premise</li>
+                                    <li><i data-lucide="check"></i> SLA 99.9%</li>
+                                    <li><i data-lucide="check"></i> Account manager dedicado</li>
+                                    <li><i data-lucide="check"></i> Suporte 24/7</li>
+                                    <li><i data-lucide="check"></i> Implementação personalizada</li>
+                                </ul>
+                                
+                                <button class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; background: #6366f1; border: none; border-radius: 25px;" onclick="contactSales('enterprise')">
+                                    <i data-lucide="phone"></i>
+                                    Falar com Especialista
+                                </button>
+                                <p style="text-align: center; font-size: 0.9rem; color: var(--text-muted); margin-top: 12px;">
+                                    Consultoria personalizada
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <!-- Segurança e Compliance -->
+                    <section>
+                        <h2 style="text-align: center; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 12px;">
+                            <i data-lucide="shield-check" style="color: var(--accent-color); width: 24px; height: 24px; flex-shrink: 0;"></i>
+                            <span>Segurança e Compliance</span>
+                        </h2>
+                        
+                        <div class="security-badges">
+                            <div class="security-badge">
+                                <i data-lucide="shield" style="color: var(--accent-color);"></i>
+                                <div>
+                                    <strong>LGPD</strong>
+                                    <div>Conformidade total</div>
+                                </div>
+                            </div>
+                            <div class="security-badge">
+                                <i data-lucide="lock" style="color: var(--accent-color);"></i>
+                                <div>
+                                    <strong>ISO 27001</strong>
+                                    <div>Segurança da informação</div>
+                                </div>
+                            </div>
+                            <div class="security-badge">
+                                <i data-lucide="key" style="color: var(--accent-color);"></i>
+                                <div>
+                                    <strong>Criptografia</strong>
+                                    <div>AES-256 end-to-end</div>
+                                </div>
+                            </div>
+                            <div class="security-badge">
+                                <i data-lucide="server" style="color: var(--accent-color);"></i>
+                                <div>
+                                    <strong>Cloud</strong>
+                                    <div>AWS SOC 2 Tipo II</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- FAQ -->
+                    <section class="faq-section">
+                        <h2 style="text-align: center; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 12px;">
+                            <i data-lucide="help-circle" style="color: var(--accent-color); width: 24px; height: 24px; flex-shrink: 0;"></i>
+                            <span>Perguntas Frequentes</span>
+                        </h2>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                Quanto tempo leva para integrar com nosso LMS?
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <div class="faq-answer" style="display: none;">
+                                A integração completa leva menos de 24 horas. Nossa equipe agenda uma janela de manutenção de 30 minutos para instalar o plugin, e o restante do processo (processamento de documentos existentes) acontece em background sem afetar o uso normal do LMS.
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                Os dados dos estudantes ficam seguros?
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <div class="faq-answer" style="display: none;">
+                                Sim, seguimos rigorosamente a LGPD e padrões internacionais. Os dados são criptografados em trânsito e em repouso, hospedados em infraestrutura AWS com certificação SOC 2. Nunca compartilhamos dados com terceiros e você mantém total controle sobre seus dados.
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                Como garantem que a IA responde apenas baseada no material do professor?
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <div class="faq-answer" style="display: none;">
+                                Nossa IA usa uma técnica chamada RAG (Retrieval-Augmented Generation) que primeiro busca informações especificamente nos documentos enviados pelo professor antes de gerar qualquer resposta. Se a informação não estiver no material fornecido, a IA informa que não pode responder com base no conteúdo disponível.
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                Posso cancelar a qualquer momento?
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <div class="faq-answer" style="display: none;">
+                                Sim, não há fidelidade. Você pode cancelar a qualquer momento e continuar usando até o final do período já pago. Todos os seus dados podem ser exportados e o plugin pode ser removido sem afetar o funcionamento do seu LMS.
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFAQ(this)">
+                                Qual é o limite de documentos que posso enviar?
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <div class="faq-answer" style="display: none;">
+                                Não há limite de documentos em nenhum plano. Você pode enviar quantos PDFs, slides, artigos e materiais quiser. Cobramos apenas pelo número de estudantes ativos que interagem com o sistema.
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Call to Action Final -->
+                    <section style="text-align: center; padding: 60px 20px; background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%); border-radius: 16px; color: white; margin-top: 60px;">
+                        <h2 style="margin-bottom: 20px;">Pronto para Reduzir 85% das Dúvidas Não Resolvidas?</h2>
+                        <p style="margin-bottom: 30px; opacity: 0.9;">Teste gratuito por 30 dias, sem compromisso.</p>
+                        
+                        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                            <button onclick="scheduleDemo()" style="background: white; color: #3b82f6; border: none; padding: 14px 28px; font-weight: 600; font-size: 16px; border-radius: 25px; cursor: pointer; transition: transform 0.2s;">
+                                Agendar Demo
+                            </button>
+                            <button onclick="contactExpert()" style="background: transparent; color: white; border: 2px solid white; padding: 14px 28px; font-weight: 600; font-size: 16px; border-radius: 25px; cursor: pointer; transition: transform 0.2s;">
+                                Falar com Especialista
+                            </button>
+                        </div>
+                        
+                        <p style="margin-top: 30px; font-size: 0.9rem; opacity: 0.8;">
+                            ✓ Sem cartão de crédito ✓ Setup incluído ✓ Suporte premium
+                        </p>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function startFreeTrial(plan) {
+            // Simular redirecionamento para formulário de teste
+            alert(`Iniciando teste gratuito do plano ${plan}!\n\nVocê será redirecionado para nosso formulário de cadastro.\n\n✓ 30 dias grátis\n✓ Sem cartão de crédito\n✓ Setup incluído`);
+            // window.location.href = `/signup?plan=${plan}&trial=true`;
+        }
+        
+        function contactSales(plan) {
+            // Simular abertura de chat/contato
+            alert(`Entrando em contato com nossa equipe de vendas!\n\nPlano: ${plan}\n\n📞 Um especialista entrará em contato em até 2 horas\n📧 Ou envie email para: vendas@classdocs.com`);
+            // window.open('https://calendly.com/classdocs-sales', '_blank');
+        }
+        
+        function scheduleDemo() {
+            // Simular agendamento de demo
+            alert(`Agendando Demo ao Vivo!\n\n🎥 Demonstração personalizada de 30 minutos\n📊 Análise das suas necessidades\n💡 Plano de implementação customizado\n\nVocê será redirecionado para nosso calendário.`);
+            // window.open('https://calendly.com/classdocs-demo', '_blank');
+        }
+        
+        function contactExpert() {
+            // Simular contato com especialista
+            alert(`Falando com Especialista!\n\n👨‍💼 Consultor educacional dedicado\n📈 Análise de ROI personalizada\n🎯 Estratégia de implementação\n\nVocê será direcionado para nosso chat especializado.`);
+            // window.open('mailto:especialista@classdocs.com?subject=Consultoria ClassDocs', '_blank');
+        }
+        
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('i');
+            
+            if (answer.style.display === 'none') {
+                answer.style.display = 'block';
+                icon.setAttribute('data-lucide', 'chevron-up');
+            } else {
+                answer.style.display = 'none';
+                icon.setAttribute('data-lucide', 'chevron-down');
+            }
+            
+            // Reinitialize Lucide icons
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

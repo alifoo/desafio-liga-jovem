@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClassDocs API - Demo Interativa</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <style>
+        .api-demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .api-section {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .api-method {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: white;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+        
+        .method-post { background: #10b981; }
+        .method-get { background: #3b82f6; }
+        .method-delete { background: #ef4444; }
+        
+        .response-example {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .pricing-card {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-color);
+        }
+        
+        .pricing-card.popular {
+            border-color: var(--accent-color);
+            position: relative;
+        }
+        
+        .pricing-card.popular::before {
+            content: "Mais Popular";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-color);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin: 16px 0 8px 0;
+        }
+        
+        .price-period {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .features {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        
+        .features li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .features li:last-child {
+            border-bottom: none;
+        }
+        
+        .demo-button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 8px;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        
+        .demo-button:hover {
+            background: var(--accent-hover);
+        }
+        
+        .demo-result {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="api-demo-container">
+        <h1 style="text-align: center; color: var(--text-primary); margin-bottom: 8px;">
+            ClassDocs Integration API
+        </h1>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 40px;">
+            Integre facilmente com Canvas, Blackboard, Moodle e outros LMS
+        </p>
+        
+        <div class="api-section">
+            <h2>🚀 Primeiros Passos</h2>
+            <p>Para começar a usar a API ClassDocs, você precisará de uma chave de API. Para esta demonstração, use:</p>
+            <div class="code-block">
+API Key (Teste): cd_test_pro_def456
+Base URL: https://classdocs.com/api/v1
+            </div>
+            <p>Adicione o cabeçalho de autorização em todas as requisições:</p>
+            <div class="code-block">
+Authorization: Bearer cd_test_pro_def456
+            </div>
+        </div>
+        
+        <div class="api-section">
+            <h2>📚 Upload de Documentos</h2>
+            <p>Faça upload de documentos do seu LMS para análise com IA:</p>
+            
+            <div style="margin: 16px 0;">
+                <span class="api-method method-post">POST</span>
+                <code>/v1/documents/upload</code>
+            </div>
+            
+            <div class="code-block">
+{
+  "title": "Introdução à Programação - Aula 1",
+  "content": "base64_encoded_pdf_content",
+  "mime_type": "application/pdf",
+  "course_id": "CS101_2024",
+  "module_id": "week1",
+  "lms_info": {
+    "platform": "canvas",
+    "version": "2024.1",
+    "institution_id": "university_abc",
+    "course_id": "CS101_2024"
+  }
+}
+            </div>
+            
+            <button class="demo-button" onclick="demoUpload()">🧪 Testar Upload</button>
+            <div id="upload-result"></div>
+        </div>
+        
+        <div class="api-section">
+            <h2>❓ Perguntas e Respostas</h2>
+            <p>Permita que estudantes façam perguntas sobre os documentos:</p>
+            
+            <div style="margin: 16px 0;">
+                <span class="api-method method-post">POST</span>
+                <code>/v1/ask</code>
+            </div>
+            
+            <div class="code-block">
+{
+  "question": "O que são variáveis em programação?",
+  "document_ids": ["doc_123", "doc_456"],
+  "student_id": "student_789",
+  "course_id": "CS101_2024",
+  "context": {
+    "assignment_id": "hw1",
+    "due_date": "2024-03-15"
+  }
+}
+            </div>
+            
+            <button class="demo-button" onclick="demoAsk()">🧪 Testar Pergunta</button>
+            <div id="ask-result"></div>
+        </div>
+        
+        <div class="api-section">
+            <h2>📊 Analytics e Progresso</h2>
+            <p>Obtenha métricas detalhadas sobre o uso e engajamento:</p>
+            
+            <div style="margin: 16px 0;">
+                <span class="api-method method-get">GET</span>
+                <code>/v1/courses/{course_id}/analytics</code>
+            </div>
+            
+            <button class="demo-button" onclick="demoAnalytics()">🧪 Ver Analytics</button>
+            <div id="analytics-result"></div>
+            
+            <div style="margin-top: 20px;">
+                <span class="api-method method-get">GET</span>
+                <code>/v1/students/{student_id}/progress</code>
+            </div>
+            
+            <button class="demo-button" onclick="demoProgress()">🧪 Ver Progresso</button>
+            <div id="progress-result"></div>
+        </div>
+        
+        <div class="api-section">
+            <h2>🔗 Webhooks para Sincronização</h2>
+            <p>Configure webhooks para sincronização em tempo real com seu LMS:</p>
+            
+            <div style="margin: 16px 0;">
+                <span class="api-method method-post">POST</span>
+                <code>/v1/webhooks/lms</code>
+            </div>
+            
+            <div class="code-block">
+{
+  "event_type": "student.enrolled",
+  "course_id": "CS101_2024",
+  "student_id": "student_789",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "lms_data": {
+    "enrollment_date": "2024-01-15",
+    "status": "active"
+  }
+}
+            </div>
+        </div>
+        
+        <div class="api-section">
+            <h2>💰 Planos e Preços</h2>
+            <p>Escolha o plano que melhor se adapta às necessidades da sua instituição:</p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">$99<span class="price-period">/mês</span></div>
+                    <ul class="features">
+                        <li>Até 1.000 chamadas API/mês</li>
+                        <li>Até 100 documentos</li>
+                        <li>5 cursos simultâneos</li>
+                        <li>Suporte por email</li>
+                        <li>Integração básica LMS</li>
+                    </ul>
+                    <button class="btn btn-secondary">Começar</button>
+                </div>
+                
+                <div class="pricing-card popular">
+                    <h3>Professional</h3>
+                    <div class="price">$299<span class="price-period">/mês</span></div>
+                    <ul class="features">
+                        <li>Até 10.000 chamadas API/mês</li>
+                        <li>Documentos ilimitados</li>
+                        <li>20 cursos simultâneos</li>
+                        <li>Suporte prioritário</li>
+                        <li>Webhooks e sincronização</li>
+                        <li>Analytics avançados</li>
+                        <li>Customização de prompts</li>
+                    </ul>
+                    <button class="btn btn-primary">Mais Popular</button>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">$999<span class="price-period">/mês</span></div>
+                    <ul class="features">
+                        <li>Chamadas API ilimitadas</li>
+                        <li>Documentos ilimitados</li>
+                        <li>Cursos ilimitados</li>
+                        <li>Suporte dedicado 24/7</li>
+                        <li>SLA garantido 99.9%</li>
+                        <li>Implementação personalizada</li>
+                        <li>Modelos IA customizados</li>
+                        <li>Conformidade FERPA/GDPR</li>
+                    </ul>
+                    <button class="btn btn-primary">Contatar Vendas</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="api-section">
+            <h2>🎯 Casos de Uso</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div style="padding: 20px; border: 1px solid var(--border-color); border-radius: 8px;">
+                    <h4>🏫 Canvas Integration</h4>
+                    <p>Integre diretamente com Canvas LMS da Instructure. Sincronize cursos, estudantes e materiais automaticamente.</p>
+                </div>
+                
+                <div style="padding: 20px; border: 1px solid var(--border-color); border-radius: 8px;">
+                    <h4>📖 Blackboard Connect</h4>
+                    <p>Conecte com Blackboard Learn para oferecer assistência IA nos cursos existentes sem migração.</p>
+                </div>
+                
+                <div style="padding: 20px; border: 1px solid var(--border-color); border-radius: 8px;">
+                    <h4>🔄 Moodle Plugin</h4>
+                    <p>Desenvolva plugins Moodle que utilizam nossa API para adicionar capacidades de IA aos cursos.</p>
+                </div>
+                
+                <div style="padding: 20px; border: 1px solid var(--border-color); border-radius: 8px;">
+                    <h4>📱 Mobile Apps</h4>
+                    <p>Crie aplicativos móveis educacionais que aproveitam nossa infraestrutura de IA para documentos.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; padding: 40px 20px;">
+            <h2>Pronto para Começar?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px;">
+                Entre em contato para uma demonstração personalizada ou acesse a documentação completa
+            </p>
+            <a href="/api/docs" class="btn btn-primary" target="_blank">Ver Documentação Completa</a>
+            <a href="mailto:integration@classdocs.com" class="btn btn-secondary">Contatar Vendas</a>
+        </div>
+    </div>
+    
+    <script>
+        // Simulações de API para a demo
+        function demoUpload() {
+            const result = document.getElementById('upload-result');
+            result.innerHTML = '<div class="demo-result"><strong>✅ Sucesso!</strong><br>Documento processado com ID: doc_abc123<br>Status: Processando chunks (42 encontrados)</div>';
+        }
+        
+        function demoAsk() {
+            const result = document.getElementById('ask-result');
+            result.innerHTML = `<div class="demo-result">
+                <strong>🤖 Resposta da IA:</strong><br>
+                "Baseado no documento 'Introdução à Programação - Aula 1', variáveis são espaços na memória do computador onde podemos armazenar dados que podem ser modificados durante a execução do programa..."<br><br>
+                <strong>Confiança:</strong> 94%<br>
+                <strong>Tempo de resposta:</strong> 1.2s<br>
+                <strong>Tokens usados:</strong> 342
+            </div>`;
+        }
+        
+        function demoAnalytics() {
+            const result = document.getElementById('analytics-result');
+            result.innerHTML = `<div class="demo-result">
+                <strong>📊 Analytics do Curso CS101_2024:</strong><br>
+                • Total de perguntas: 847<br>
+                • Estudantes ativos: 23<br>
+                • Documento mais acessado: "Introdução à Programação"<br>
+                • Tópico com mais dúvidas: "Loops e Condicionais"<br>
+                • Tempo médio de resposta: 1.25s
+            </div>`;
+        }
+        
+        function demoProgress() {
+            const result = document.getElementById('progress-result');
+            result.innerHTML = `<div class="demo-result">
+                <strong>📈 Progresso do Estudante:</strong><br>
+                • Perguntas feitas: 15<br>
+                • Documentos acessados: 5<br>
+                • Score de engajamento: 8.2/10<br>
+                • Tópicos estudados: Arrays, Funções, Loops<br>
+                • Última atividade: 2 horas atrás
+            </div>`;
+        }
+    </script>
+</body>
+</html>

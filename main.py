@@ -14,7 +14,7 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 class SimplePDFRAG:
     def __init__(self):
         genai.configure(api_key=GEMINI_API_KEY)
-        self.model = genai.GenerativeModel("gemini-1.5-flash")
+        self.model = genai.GenerativeModel("gemini-2.5-flash")
 
         # load embedding model
         self.embedder = SentenceTransformer("all-MiniLM-L6-v2")
@@ -94,7 +94,7 @@ class SimplePDFRAG:
         print(f"Loaded {len(pdf_files)} PDF files with {len(self.chunks)} total chunks")
 
     def retrieve_relevant_chunks(self, query, top_k=3):
-        """Retrieve most relevant chunks for query"""
+        """Retrieve most relevant chunks for query with source information"""
         query_embedding = self.embedder.encode([query])
 
         # calculate similarities
@@ -103,17 +103,36 @@ class SimplePDFRAG:
         # get top k indices
         top_indices = np.argsort(similarities)[-top_k:][::-1]
 
-        relevant_chunks = [self.chunks[i] for i in top_indices]
-        return relevant_chunks
+        relevant_chunks_with_sources = []
+        for i in top_indices:
+            chunk_data = {
+                'content': self.chunks[i],
+                'source': self.chunk_sources[i],
+                'similarity': similarities[i]
+            }
+            relevant_chunks_with_sources.append(chunk_data)
+        
+        return relevant_chunks_with_sources
 
     def chat(self, question):
         """Chat with the PDF content using Gemini"""
         if not self.chunks:
             return "Olá! 👋 Ainda não temos materiais da aula carregados no sistema. Por favor, peça ao seu professor para enviar os documentos da aula para que eu possa ajudá-lo com suas dúvidas."
 
-        # retrieve relevant context
-        relevant_chunks = self.retrieve_relevant_chunks(question)
-        context = "\n\n".join(relevant_chunks)
+        # retrieve relevant context with sources
+        relevant_chunks_data = self.retrieve_relevant_chunks(question)
+        
+        # build context with source information
+        context_parts = []
+        sources_used = set()
+        for chunk_data in relevant_chunks_data:
+            source = chunk_data['source']
+            content = chunk_data['content']
+            context_parts.append(f"[Fonte: {source}]\n{content}")
+            sources_used.add(source)
+        
+        context = "\n\n".join(context_parts)
+        sources_list = ", ".join(sorted(sources_used))
 
         # create prompt
         prompt = f"""Você é um assistente de ensino inteligente do ClassDocs, auxiliando estudantes durante a aula. Sua função é ajudar os alunos a compreender melhor o conteúdo dos materiais didáticos fornecidos pelo professor.
@@ -125,15 +144,19 @@ INSTRUÇÕES IMPORTANTES:
 - Incentive o aprendizado e a curiosidade
 - Mantenha um tom respeitoso e encorajador
 - Se a pergunta não estiver relacionada ao contexto dos documentos, informe educadamente que só pode ajudar com o conteúdo da aula
+- SEMPRE mencione as fontes dos documentos quando basear sua resposta neles
+- Use o formato: "Baseado no documento [nome_do_arquivo]..." quando referenciar informações específicas
+
+MATERIAIS DISPONÍVEIS DA AULA: {sources_list}
 
 CONTEXTO DOS MATERIAIS DA AULA:
 {context}
 
 PERGUNTA DO ESTUDANTE: {question}
 
-Se você encontrar a informação no contexto, responda de forma didática e educativa. Se não houver informação suficiente no material fornecido, responda:
+Se você encontrar a informação no contexto, responda de forma didática e educativa, mencionando sempre as fontes dos documentos. Se não houver informação suficiente no material fornecido, responda:
 
-"Desculpe, não encontrei essa informação específica nos materiais da aula disponíveis. Recomendo que você chame o professor para esclarecer essa dúvida, pois ele poderá fornecer uma explicação mais completa sobre esse tópico. 🙋‍♂️"
+"Desculpe, não encontrei essa informação específica nos materiais da aula disponíveis ({sources_list}). Recomendo que você chame o professor para esclarecer essa dúvida, pois ele poderá fornecer uma explicação mais completa sobre esse tópico. 🙋‍♂️"
 
 RESPOSTA:"""
 

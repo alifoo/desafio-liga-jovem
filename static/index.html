@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClassDocs - Plataforma Educacional</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/header.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/footer.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="/static/js/icons.js"></script>
+</head>
+<body>
+    <div class="chatgpt-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="sidebar-logo">ClassDocs</a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Navegação</div>
+                    <a href="/" class="nav-item active">
+                        <i data-lucide="home" class="nav-item-icon"></i>
+                        Início
+                    </a>
+                    <a href="/teacher" class="nav-item">
+                        <i data-lucide="graduation-cap" class="nav-item-icon"></i>
+                        Área do Professor
+                    </a>
+                    <a href="/student" class="nav-item">
+                        <i data-lucide="user" class="nav-item-icon"></i>
+                        Área do Estudante
+                    </a>
+                    <a href="/analytics" class="nav-item">
+                        <i data-lucide="bar-chart-3" class="nav-item-icon"></i>
+                        Analytics
+                    </a>
+                    <a href="/pricing" class="nav-item">
+                        <i data-lucide="credit-card" class="nav-item-icon"></i>
+                        Preços & Integração
+                    </a>
+                    <a href="/api/docs" class="nav-item" target="_blank">
+                        <i data-lucide="code" class="nav-item-icon"></i>
+                        API Integration
+                    </a>
+                </div>
+            </nav>
+            
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">CD</div>
+                    <div class="user-info">
+                        <div class="user-name">ClassDocs</div>
+                        <div class="user-plan">Plataforma Educacional</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="mobile-menu-toggle">
+                    <i data-lucide="menu"></i>
+                </button>
+                <h1 class="main-title">Bem-vindo ao ClassDocs</h1>
+                <div class="main-actions">
+                </div>
+            </header>
+
+            <div class="main-content-area">
+                <div class="welcome-message" style="text-align: center;">Plataforma Educacional com Inteligência Artificial</div>
+                
+                <div class="content-wrapper">
+                    <section class="upload-section">
+                        <h2>Escolha sua Área</h2>
+                        
+                        <div class="documents-list">
+                            <a href="/teacher" class="document-item" style="text-decoration: none; display: block;">
+                                <div class="document-info">
+                                    <i data-lucide="graduation-cap" class="file-icon" style="color: var(--accent-color); font-size: 24px;"></i>
+                                    <div>
+                                        <div class="document-name">Área do Professor</div>
+                                        <p style="color: var(--text-muted); margin: 4px 0 0 0; font-size: 14px;">Gerencie documentos e acompanhe o progresso dos estudantes</p>
+                                    </div>
+                                </div>
+                            </a>
+                            
+                            <a href="/student" class="document-item" style="text-decoration: none; display: block;">
+                                <div class="document-info">
+                                    <i data-lucide="user" class="file-icon" style="color: var(--accent-color); font-size: 24px;"></i>
+                                    <div>
+                                        <div class="document-name">Área do Estudante</div>
+                                        <p style="color: var(--text-muted); margin: 4px 0 0 0; font-size: 14px;">Faça perguntas e aprenda com assistência de IA</p>
+                                    </div>
+                                </div>
+                            </a>
+                            
+                            <a href="/analytics" class="document-item" style="text-decoration: none; display: block;">
+                                <div class="document-info">
+                                    <i data-lucide="bar-chart-3" class="file-icon" style="color: var(--accent-color); font-size: 24px;"></i>
+                                    <div>
+                                        <div class="document-name">Analytics Institucionais</div>
+                                        <p style="color: var(--text-muted); margin: 4px 0 0 0; font-size: 14px;">Visualize métricas e relatórios de uso</p>
+                                    </div>
+                                </div>
+                            </a>
+                            
+                            <a href="/api/docs" class="document-item" style="text-decoration: none; display: block;" target="_blank">
+                                <div class="document-info">
+                                    <i data-lucide="code" class="file-icon" style="color: var(--accent-color); font-size: 24px;"></i>
+                                    <div>
+                                        <div class="document-name">API Integration</div>
+                                        <p style="color: var(--text-muted); margin: 4px 0 0 0; font-size: 14px;">Integre com Canvas, Blackboard, Moodle e outros LMS</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </section>
+
+                    <section class="documents-section">
+                        <h2>Sobre o ClassDocs</h2>
+                        <div style="color: var(--text-secondary); line-height: 1.6;">
+                            <p>O ClassDocs é uma plataforma educacional inovadora que utiliza inteligência artificial para transformar a experiência de ensino e aprendizagem.</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            
+            if (mobileMenuToggle && sidebar) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('open');
+                });
+            }
+            
+        });
+    </script>
+</body>
+</html>

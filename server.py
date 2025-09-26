@@ -1,14 +1,28 @@
 from fastapi import FastAPI, File, UploadFile, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 import os
 import shutil
 from pathlib import Path
 from main import SimplePDFRAG
+from api_integration import integration_app
 import json
 import asyncio
 
 app = FastAPI(title="ClassDocs - Plataforma Educacional")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Mount integration API
+app.mount("/api", integration_app)
 
 UPLOAD_DIR = "uploads"
 STATIC_DIR = "static"
@@ -36,23 +50,9 @@ class ConnectionManager:
 
 manager = ConnectionManager()
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 async def root():
-    return """
-    <html>
-        <head><title>ClassDocs - Plataforma Educacional</title></head>
-        <body style="font-family: Arial, sans-serif; text-align: center; margin-top: 100px; background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%); min-height: 100vh; color: white;">
-            <div style="padding: 40px;">
-                <h1 style="font-size: 3rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">📚 ClassDocs</h1>
-                <p style="font-size: 1.2rem; margin-bottom: 50px; opacity: 0.9;">Plataforma Educacional com IA</p>
-                <div style="margin: 50px;">
-                    <a href="/teacher" style="display: inline-block; padding: 20px 40px; margin: 10px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); transition: all 0.3s; font-weight: 600;">👨‍🏫 Área do Professor</a>
-                    <a href="/student" style="display: inline-block; padding: 20px 40px; margin: 10px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); transition: all 0.3s; font-weight: 600;">🎓 Área do Estudante</a>
-                </div>
-            </div>
-        </body>
-    </html>
-    """
+    return FileResponse(f"{STATIC_DIR}/index.html")
 
 @app.get("/teacher")
 async def teacher_view():
@@ -65,6 +65,22 @@ async def student_view():
 @app.get("/analytics")
 async def analytics_view():
     return FileResponse(f"{STATIC_DIR}/analytics.html")
+
+@app.get("/api-demo")
+async def api_demo_view():
+    return FileResponse(f"{STATIC_DIR}/api-demo.html")
+
+@app.get("/pricing")
+async def pricing_view():
+    return FileResponse(f"{STATIC_DIR}/pricing.html")
+
+@app.get("/favicon.ico")
+async def favicon():
+    return FileResponse(f"{STATIC_DIR}/favicon.svg")
+
+@app.get("/favicon.svg")
+async def favicon_svg():
+    return FileResponse(f"{STATIC_DIR}/favicon.svg")
 
 @app.get("/premium", response_class=HTMLResponse)
 async def premium_home():
