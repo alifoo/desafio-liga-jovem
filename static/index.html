@@ -113,6 +113,16 @@
                                 </div>
                             </a>
                             
+                            <a href="/pricing" class="document-item" style="text-decoration: none; display: block;">
+                                <div class="document-info">
+                                    <i data-lucide="credit-card" class="file-icon" style="color: var(--accent-color); font-size: 24px;"></i>
+                                    <div>
+                                        <div class="document-name">Preços & Integração</div>
+                                        <p style="color: var(--text-muted); margin: 4px 0 0 0; font-size: 14px;">Conheça nossos planos e integração com LMS existentes</p>
+                                    </div>
+                                </div>
+                            </a>
+                            
                             <a href="/api/docs" class="document-item" style="text-decoration: none; display: block;" target="_blank">
                                 <div class="document-info">
                                     <i data-lucide="code" class="file-icon" style="color: var(--accent-color); font-size: 24px;"></i>
@@ -138,6 +148,7 @@
 
     <script>
 
+
         // Mobile menu toggle
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
@@ -149,6 +160,8 @@
                 });
             }
             
+            // Initialize lucide icons
+            lucide.createIcons();
         });
     </script>
 </body>

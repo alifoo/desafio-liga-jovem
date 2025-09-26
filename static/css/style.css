@@ -355,6 +355,7 @@ body {
 }
 
 /* Responsive design */
+
 @media (max-width: 768px) {
     .sidebar {
         transform: translateX(-100%);
@@ -376,6 +377,10 @@ body {
     .chat-input-container {
         max-width: 100%;
     }
+    
+    .sidebar-toggle {
+        display: block;
+    }
 }
 
 
@@ -388,6 +393,7 @@ body {
     width: 20px;
     height: 20px;
 }
+
 
 .file-icon[data-lucide] {
     width: 24px;

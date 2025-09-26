@@ -108,7 +108,7 @@
 
     <script>
 
-        // Mobile menu toggle
+
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
             const sidebar = document.querySelector('.sidebar');
@@ -119,6 +119,8 @@
                 });
             }
             
+            // Initialize lucide icons
+            lucide.createIcons();
         });
 
         class ChatApp {
